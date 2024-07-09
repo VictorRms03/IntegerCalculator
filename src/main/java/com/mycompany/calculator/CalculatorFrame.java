@@ -6,6 +6,9 @@ package com.mycompany.calculator;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -23,10 +26,18 @@ public class CalculatorFrame extends JFrame {
     
     public CalculatorFrame() {
         
+        // Initial configures of JFrame
         frameConfig();
-        final JLabel numbersAreaLabel = numbersAreaConfig();
-        buttonsAreaConfig( numbersAreaLabel );
         
+        // Create the Numbers Area JLabel
+        final JLabel numbersAreaLabel = createNumbersArea();
+        
+        // Create the Buttons Area JPanel
+        final JPanel buttonsAreaPanel = createButtonsArea( numbersAreaLabel );
+        
+        // Add the created components to JFrame
+        this.add( numbersAreaLabel );
+        this.add( buttonsAreaPanel ); 
     }
     
     /**
@@ -47,10 +58,10 @@ public class CalculatorFrame extends JFrame {
     }
     
     /**
-     * Set JLabel of numbersArena Config
+     * Create the JLabel of numbersArena Config
      * @return the JLabel created and configured
      */
-    private JLabel numbersAreaConfig() {
+    private JLabel createNumbersArea() {
         
         JLabel numbersArea = new JLabel();
         updateResultString( numbersArea );
@@ -62,157 +73,132 @@ public class CalculatorFrame extends JFrame {
         numbersArea.setBounds( 0, 50, this.getWidth()-16 , 100 );
         numbersArea.setBorder( BorderFactory.createLineBorder( Color.BLACK, 2 ) );
         
-        this.add( numbersArea );
-        
         return numbersArea;
         
     }
     
     /**
      * Set JPanel of Buttons area
+     * @param numbersAreaLabel is the Label that the buttons of this area will change Text
+     * @return the JPanel created and configured
      */
-    private void buttonsAreaConfig( JLabel numbersAreaLabel ) {
+    private JPanel createButtonsArea( JLabel numbersAreaLabel ) {
         
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setBackground( Color.WHITE );
         buttonsPanel.setBounds( 0, 150, this.getWidth()-16, 411 );
         buttonsPanel.setLayout( null );
-        this.add( buttonsPanel );
         
-        buttonsConfig( buttonsPanel, numbersAreaLabel );
+        final List<JButton> buttonsList = createButtons( numbersAreaLabel );
+        for( JButton button : buttonsList ){
+            buttonsPanel.add( button );
+        }
+        
+        return buttonsPanel;
     }
     
     /**
-     * Set all buttons of JPanel of Buttons area
-     * @param buttonsPanel are the JPanel that buttons are gonna be part
+     * create all buttons of JPanel of Buttons area
+     * @param numbersAreaLabel is the Label that the buttons of this area will change Text
+     * @return A list with buttons
      */
-    private void buttonsConfig( JPanel buttonsPanel, JLabel numbersAreaLabel ) {
+    private List<JButton> createButtons( JLabel numbersAreaLabel ) {
         
-        JButton oneButton = new JButton("1");
-        oneButton.setBounds(0, 200, 100, 100);
-        oneButton.addActionListener( e -> {
-            calculator.addNumber(1);
-            updateResultString( numbersAreaLabel );
-                });
-        buttonsPanel.add(oneButton);
+        List<JButton> buttonsList = new ArrayList<>();
         
-        JButton twoButton = new JButton("2");
-        twoButton.setBounds(100, 200, 100, 100);
-        twoButton.addActionListener( e -> {
-            calculator.addNumber(2);
-            updateResultString( numbersAreaLabel );
-                });
-        buttonsPanel.add(twoButton);
+        buttonsList.add( createNumberButton( 1, numbersAreaLabel, new Rectangle( 0, 200, 100, 100 ) ) );
+        buttonsList.add( createNumberButton( 2, numbersAreaLabel, new Rectangle( 100, 200, 100, 100 ) ) );
+        buttonsList.add( createNumberButton( 3, numbersAreaLabel, new Rectangle( 200, 200, 100, 100 ) ) );
+        buttonsList.add( createNumberButton( 4, numbersAreaLabel, new Rectangle( 0, 100, 100, 100 ) ) );
+        buttonsList.add( createNumberButton( 5, numbersAreaLabel, new Rectangle( 100, 100, 100, 100 ) ) );
+        buttonsList.add( createNumberButton( 6, numbersAreaLabel, new Rectangle( 200, 100, 100, 100 ) ) );
+        buttonsList.add( createNumberButton( 7, numbersAreaLabel, new Rectangle( 0, 0, 100, 100 ) ) );
+        buttonsList.add( createNumberButton( 8, numbersAreaLabel, new Rectangle( 100, 0, 100, 100 ) ) );
+        buttonsList.add( createNumberButton( 9, numbersAreaLabel, new Rectangle( 200, 0, 100, 100 ) ) );
+        buttonsList.add( createNumberButton( 0, numbersAreaLabel, new Rectangle( 100, 300, 100, 100 ) ) ); 
         
-        JButton threeButton = new JButton("3");
-        threeButton.setBounds(200, 200, 100, 100);
-        threeButton.addActionListener( e -> {
-            calculator.addNumber(3);
-            updateResultString( numbersAreaLabel );
-                });
-        buttonsPanel.add(threeButton);
+        buttonsList.add( createOperatorButton( '/', numbersAreaLabel, new Rectangle( 300, 0, 100, 100 ) ) );
+        buttonsList.add( createOperatorButton( '*', numbersAreaLabel, new Rectangle( 300, 100, 100, 100 ) ) );
+        buttonsList.add( createOperatorButton( '-', numbersAreaLabel, new Rectangle( 300, 200, 100, 100 ) ) );
+        buttonsList.add( createOperatorButton( '+', numbersAreaLabel, new Rectangle( 300, 300, 100, 100 ) ) );
+        buttonsList.add( createOperatorButton( '=', numbersAreaLabel, new Rectangle( 200, 300, 100, 100 ) ) );
         
-        JButton fourButton = new JButton("4");
-        fourButton.setBounds(0, 100, 100, 100);
-        fourButton.addActionListener( e -> {
-            calculator.addNumber(4);
-            updateResultString( numbersAreaLabel );
-                });
-        buttonsPanel.add(fourButton);
+        buttonsList.add( createClearButton( "CLEAR" ,numbersAreaLabel, new Rectangle( 0, 300, 100, 100 ) ) );
         
-        JButton fiveButton = new JButton("5");
-        fiveButton.setBounds(100, 100, 100, 100);
-        fiveButton.addActionListener( e -> {
-            calculator.addNumber(5);
-            updateResultString( numbersAreaLabel );
-                });
-        buttonsPanel.add(fiveButton);
+        return buttonsList;
         
-        JButton sixButton = new JButton("6");
-        sixButton.setBounds(200, 100, 100, 100);
-        sixButton.addActionListener( e -> {
-            calculator.addNumber(6);
-            updateResultString( numbersAreaLabel );
-                });
-        buttonsPanel.add(sixButton);
-        
-        JButton sevenButton = new JButton("7");
-        sevenButton.setBounds(0, 0, 100, 100);
-        sevenButton.addActionListener( e -> {
-            calculator.addNumber(7);
-            updateResultString( numbersAreaLabel );
-                });
-        buttonsPanel.add(sevenButton);
-        
-        JButton eightButton = new JButton("8");
-        eightButton.setBounds(100, 0, 100, 100);
-        eightButton.addActionListener( e -> {
-            calculator.addNumber(8);
-            updateResultString( numbersAreaLabel );
-                });
-        buttonsPanel.add(eightButton);
-        
-        JButton nineButton = new JButton("9");
-        nineButton.setBounds(200, 0, 100, 100);
-        nineButton.addActionListener( e -> {
-            calculator.addNumber(9);
-            updateResultString( numbersAreaLabel );
-                });
-        buttonsPanel.add(nineButton);
-        
-        JButton divideButton = new JButton("/");
-        divideButton.setBounds(300, 0, 100, 100);
-        divideButton.addActionListener( e -> {
-            calculator.setOperator('/');
-            updateResultString( numbersAreaLabel );
-                });
-        buttonsPanel.add(divideButton);
-        
-        JButton timesButton = new JButton("*");
-        timesButton.setBounds(300, 100, 100, 100);
-        timesButton.addActionListener( e -> {
-            calculator.setOperator('*');
-            updateResultString( numbersAreaLabel );
-                });
-        buttonsPanel.add(timesButton);
-        
-        JButton minusButton = new JButton("-");
-        minusButton.setBounds(300, 200, 100, 100);
-        minusButton.addActionListener( e -> {
-            calculator.setOperator('-');
-            updateResultString( numbersAreaLabel );
-                });
-        buttonsPanel.add(minusButton);
-        
-        JButton plusButton = new JButton("+");
-        plusButton.setBounds(300, 300, 100, 100);
-        plusButton.addActionListener( e -> {
-            calculator.setOperator('+');
-            updateResultString( numbersAreaLabel );
-                });
-        buttonsPanel.add(plusButton);
-
-        JButton equalsButton = new JButton("=");
-        equalsButton.setBounds(200, 300, 100, 100);
-        equalsButton.addActionListener( e -> {
-            calculator.calculate();
-            updateResultString( numbersAreaLabel );
-        });
-        buttonsPanel.add(equalsButton);
-        
-        JButton clearButton = new JButton("CLEAR");
-        clearButton.setBounds(100, 300, 100, 100);
-        clearButton.addActionListener( e -> {
-            calculator.clearAll();
-            updateResultString( numbersAreaLabel );
-        });
-        buttonsPanel.add(clearButton);
     };
     
     /**
      * Updates the result string to the String of the Calculator object
+     * @param numbersAreaLabel Label that will be text changed
      */
-    private void updateResultString( JLabel numbersAreaLabel){
+    private void updateResultString( JLabel numbersAreaLabel ){
         numbersAreaLabel.setText( calculator.getCurrentResultText() );
+    }
+    
+    /**
+     * Create a new number button
+     * @param x is the Number of the Button
+     * @param numbersAreaLabel is the label that the button will change String
+     * @param buttonArea is the area and localization of the button
+     * @return the button created
+     */
+    private JButton createNumberButton( Integer x, JLabel numbersAreaLabel, Rectangle buttonArea ) {
+        JButton button = new JButton( x.toString() );
+        button.setBounds( buttonArea );
+        button.addActionListener( e -> {
+            calculator.addNumber( x );
+            updateResultString( numbersAreaLabel );
+        });
+        return button;
+    }
+    
+    /**
+     * Create a new operator button
+     * @param c is the Operator of the Button
+     * @param numbersAreaLabel is the label that the button will change String
+     * @param buttonArea is the area and localization of the button
+     * @return the button created
+     */
+    private JButton createOperatorButton( Character c, JLabel numbersAreaLabel, Rectangle buttonArea ) {
+        
+        JButton button = new JButton( c.toString() );
+        button.setBounds( buttonArea );
+        
+        if (c == '='){
+            
+            button.addActionListener( e -> {
+                calculator.calculate();
+                updateResultString( numbersAreaLabel );
+            });
+            
+        } else {
+            
+            button.addActionListener( e -> {
+                calculator.setOperator( c );
+                updateResultString( numbersAreaLabel );
+            });
+            
+        }
+        
+        return button;
+    }
+    
+    /**
+     * Create a new clear button
+     * @param s is the String that will show on the button
+     * @param numbersAreaLabel is the label that the button will change String
+     * @param buttonArea is the area and localization of the button
+     * @return the button created
+     */
+    private JButton createClearButton( String s, JLabel numbersAreaLabel, Rectangle buttonArea ) {
+        JButton button = new JButton( s );
+        button.setBounds( buttonArea );
+        button.addActionListener( e -> {
+            calculator.clearAll();
+            updateResultString( numbersAreaLabel );
+        });
+        return button;
     }
 }
