@@ -130,14 +130,6 @@ public class CalculatorFrame extends JFrame {
     };
     
     /**
-     * Updates the result string to the String of the Calculator object
-     * @param numbersAreaLabel Label that will be text changed
-     */
-    private void updateResultString( JLabel numbersAreaLabel ){
-        numbersAreaLabel.setText( calculator.getCurrentResultText() );
-    }
-    
-    /**
      * Create a new number button
      * @param x is the Number of the Button
      * @param numbersAreaLabel is the label that the button will change String
@@ -166,18 +158,31 @@ public class CalculatorFrame extends JFrame {
         JButton button = new JButton( c.toString() );
         button.setBounds( buttonArea );
         
-        if (c == '='){
+        if ( c == '=' ) {
             
             button.addActionListener( e -> {
-                calculator.calculate();
-                updateResultString( numbersAreaLabel );
+                
+                try {
+                   calculator.calculate(); 
+                   updateResultString( numbersAreaLabel );
+                } catch ( ArithmeticException ex ) {
+                    updateResultStringToError( numbersAreaLabel );
+                }
+                
             });
             
         } else {
             
             button.addActionListener( e -> {
-                calculator.setOperator( c );
-                updateResultString( numbersAreaLabel );
+                
+                try {
+                    calculator.setOperator( c );
+                    updateResultString( numbersAreaLabel );
+                } catch ( ArithmeticException ex ) {
+                    updateResultStringToError( numbersAreaLabel );
+                }
+                
+                
             });
             
         }
@@ -200,5 +205,21 @@ public class CalculatorFrame extends JFrame {
             updateResultString( numbersAreaLabel );
         });
         return button;
+    }
+    
+     /**
+     * Updates the result label text to the String of the Calculator object
+     * @param numbersAreaLabel Label that will be text changed
+     */
+    private void updateResultString( JLabel numbersAreaLabel ){
+        numbersAreaLabel.setText( calculator.getCurrentResultText() );
+    }
+    
+    /**
+     * Updates the result label text to an "ERROR" message
+     * @param numbersAreaLabel Label that will be text changed
+     */
+    private void updateResultStringToError ( JLabel numbersAreaLabel ){
+        numbersAreaLabel.setText( "ERROR" );
     }
 }

@@ -16,7 +16,8 @@ public class Calculator {
     private boolean isLeftNumberResult = false;
     
     /**
-     * Execute the calculation with the parameters of the Calculator
+     * Execute the calculation with the parameters of the Calculator, treating 
+     * the ArithmeticException of division by 0 error
      */
     public void calculate() {
         
@@ -33,8 +34,16 @@ public class Calculator {
                 result = this.leftNumber * this.rightNumber;
                 break;
             case '/':
-                result = this.leftNumber / this.rightNumber;
+                
+                try {
+                    result = this.leftNumber / this.rightNumber;
+                } catch ( ArithmeticException e ) {
+                    clearAll();
+                    result = 0;
+                    throw e;
+                }
                 break;
+                
             default:
                 result = this.leftNumber;
                 break;
@@ -80,10 +89,13 @@ public class Calculator {
      */
     public void setOperator( char operator ) {
         
-        if (this.operator == ' '){
+        if ( this.operator == ' ' ){
             
             this.operator = operator;
             
+        } else if ( !isLeftNumberResult ){
+            calculate();
+            this.operator = operator;
         } else {
             
             if( operator == this.operator ){
@@ -120,6 +132,6 @@ public class Calculator {
      * @return the current result string
      */
     public String getCurrentResultText() {
-        return (this.operator == ' ') ? ( this.leftNumber.toString() ) : ( this.leftNumber + " " + this.operator + " " + this.rightNumber );
+        return ( this.operator == ' ' ) ? ( this.leftNumber.toString() ) : ( this.leftNumber + " " + this.operator + " " + this.rightNumber );
     } 
 }
