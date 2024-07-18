@@ -15,46 +15,65 @@ public class Calculator {
     
     /**
      * Execute the calculation with the first 3 terms ( 2 numbers and 1 operator)
-     * till it gets the result, then add it to the string operation.
+     * till it gets the result, then call clearAll() and add the result to the
+     * string operation.
      */
     public void calculate() {
         
-        String[] terms = operation.toString().split( " " );
+        String[] terms = this.operation.toString().split( " " );
         
-        while ( terms.length > 1 ){
-            terms = calculate( terms );
+        // doing the * and / operations first:
+        int k = terms.length;
+        for( int i=0; i<k; ){
+            if( terms[i].equals("*") || terms[i].equals("/") ){
+                terms = calculate( terms, i-1 );
+                k-=2;
+            } else {
+                i++;
+            }
         }
         
-        operation.append(" = ").append( terms[0] );
-        hasOperationResult = true;
+        // doing the rest of the operations:
+        while ( terms.length > 1 ){
+            terms = calculate( terms, 0 );
+        }
+        
+        this.operation.append(" = ").append( terms[0] );
+        this.hasOperationResult = true;
         
     }
     
     /**
      * Execute the calculation with the first 3 terms and return the result
-     * of these as just 1 term on the given array treating the 
+     * of this operation as just 1 term on the given array treating the
      * ArithmeticException of division by 0 error.
      * @param terms is the array with all terms of the operation.
+     * @param start is the position of the first term of the operation that will
+     * be compressed.
      * @return the given array but with the 3 first terms compressed as just 1.
      */
-    private String[] calculate( String[] terms ) {
+    private String[] calculate( String[] terms, int start ) {
         
-        String[] newTerms = new String[ terms.length-2];
+        String[] newTerms = new String[terms.length-2];
         
-        switch ( terms[1] ) {
+        for( int i=0; i<start; i++ ){
+            newTerms[i] = terms[i];
+        }
+        
+        switch ( terms[start+1] ) {
             case "+":
-                newTerms[0] = Integer.toString( Integer.parseInt( terms[0] ) + Integer.parseInt( terms[2] ) );
+                newTerms[start] = Integer.toString( Integer.parseInt( terms[start] ) + Integer.parseInt( terms[start+2] ) );
                 break;
             case "-":
-                newTerms[0] = Integer.toString( Integer.parseInt( terms[0] ) - Integer.parseInt( terms[2] ) );
+                newTerms[start] = Integer.toString( Integer.parseInt( terms[start] ) - Integer.parseInt( terms[start+2] ) );
                 break;
             case "*":
-                newTerms[0] = Integer.toString( Integer.parseInt( terms[0] ) * Integer.parseInt( terms[2] ) );
+                newTerms[start] = Integer.toString( Integer.parseInt( terms[start] ) * Integer.parseInt( terms[start+2] ) );
                 break;
             case "/":
                 
                 try {
-                    newTerms[0] = Integer.toString( Integer.parseInt( terms[0] ) / Integer.parseInt( terms[2] ) );
+                    newTerms[start] = Integer.toString( Integer.parseInt( terms[start] ) / Integer.parseInt( terms[start] ) );
                 } catch ( ArithmeticException e ) {
                     throw e;
                 }
@@ -65,7 +84,8 @@ public class Calculator {
                 throw new AssertionError();
         }
         
-        for( int i=1; i<newTerms.length; i++ ) {
+        
+        for( int i=start+1; i<newTerms.length; i++ ) {
             newTerms[i] = terms[i+2];
         }
         
@@ -80,11 +100,11 @@ public class Calculator {
      */
     public void addTerm( char term ) {
         
-        if ( hasOperationResult ) {
+        if ( this.hasOperationResult ) {
             if ( isOperator( term ) ){
-                String result = operation.toString().split(" ")[ operation.toString().split(" ").length-1 ];
+                String result = this.operation.toString().split(" ")[ this.operation.toString().split(" ").length-1 ];
                 clearAll();
-                operation.append( result ); 
+                this.operation.append( result ); 
             } else {
                 clearAll();
             }
@@ -127,7 +147,7 @@ public class Calculator {
      */
     public void clearAll(){
         this.operation.delete( 0, this.operation.length() );
-        hasOperationResult = false;
+        this.hasOperationResult = false;
     }
     
     /**
