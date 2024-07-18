@@ -118,7 +118,7 @@ public class CalculatorFrame extends JFrame {
         buttonsList.add( createNumberButton( '0', numbersAreaLabel, new Rectangle( 100, 300, 100, 100 ) ) ); 
         
         buttonsList.add( createOperatorButton( '/', numbersAreaLabel, new Rectangle( 300, 0, 100, 100 ) ) );
-        buttonsList.add( createOperatorButton( '*', numbersAreaLabel, new Rectangle( 300, 100, 100, 100 ) ) );
+        buttonsList.add( createOperatorButton( 'x', numbersAreaLabel, new Rectangle( 300, 100, 100, 100 ) ) );
         buttonsList.add( createOperatorButton( '-', numbersAreaLabel, new Rectangle( 300, 200, 100, 100 ) ) );
         buttonsList.add( createOperatorButton( '+', numbersAreaLabel, new Rectangle( 300, 300, 100, 100 ) ) );
         buttonsList.add( createEqualsButton( "=", numbersAreaLabel, new Rectangle( 200, 300, 100, 100 ) ) );

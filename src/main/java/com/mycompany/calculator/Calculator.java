@@ -50,7 +50,7 @@ public class Calculator {
         
         // doing the * and / operations first:
         for( int i=0; i<terms.size(); ) {
-            if( terms.get(i).equals("*") || terms.get(i).equals("/") ){
+            if( terms.get(i).equals("x") || terms.get(i).equals("/") ){
                 terms = calculate( terms, i-1 );
             } else {
                 i++;
@@ -85,7 +85,7 @@ public class Calculator {
             case "-":
                 terms.set( start, Integer.toString( Integer.parseInt( terms.get(start) ) - Integer.parseInt( terms.get(start+2) ) ) );
                 break;
-            case "*":
+            case "x":
                 terms.set( start, Integer.toString( Integer.parseInt( terms.get(start) ) * Integer.parseInt( terms.get(start+2) ) ) );
                 break;
             case "/":
@@ -201,7 +201,7 @@ public class Calculator {
      * @return true if the term is an operator and false if it isn't.
      */
     private boolean isOperator ( char term ){
-        return term == '+' || term == '-' || term == '*' || term == '/';
+        return term == '+' || term == '-' || term == 'x' || term == '/';
     }
     
     /**
@@ -210,6 +210,6 @@ public class Calculator {
      * @return true if the term is an operator and false if it isn't.
      */
     private boolean isOperator ( String term ){
-        return term.equals( "+" ) || term.equals( "-" ) || term.equals( "*" ) || term.equals( "/" );
+        return term.equals( "+" ) || term.equals( "-" ) || term.equals( "x" ) || term.equals( "/" );
     }
 }
