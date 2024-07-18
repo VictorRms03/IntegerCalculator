@@ -121,7 +121,7 @@ public class CalculatorFrame extends JFrame {
         buttonsList.add( createOperatorButton( '*', numbersAreaLabel, new Rectangle( 300, 100, 100, 100 ) ) );
         buttonsList.add( createOperatorButton( '-', numbersAreaLabel, new Rectangle( 300, 200, 100, 100 ) ) );
         buttonsList.add( createOperatorButton( '+', numbersAreaLabel, new Rectangle( 300, 300, 100, 100 ) ) );
-        buttonsList.add( createOperatorButton( '=', numbersAreaLabel, new Rectangle( 200, 300, 100, 100 ) ) );
+        buttonsList.add( createEqualsButton( numbersAreaLabel, new Rectangle( 200, 300, 100, 100 ) ) );
         
         buttonsList.add( createClearButton( "CLEAR" ,numbersAreaLabel, new Rectangle( 0, 300, 100, 100 ) ) );
         
@@ -131,7 +131,7 @@ public class CalculatorFrame extends JFrame {
     
     /**
      * Create a new number button
-     * @param x is the Number of the Button
+     * @param x is the Char of the Button
      * @param numbersAreaLabel is the label that the button will change String
      * @param buttonArea is the area and localization of the button
      * @return the button created
@@ -158,35 +158,42 @@ public class CalculatorFrame extends JFrame {
         JButton button = new JButton( c.toString() );
         button.setBounds( buttonArea );
         
-        if ( c == '=' ) {
+        button.addActionListener( e -> {
+                
+            try {
+                calculator.addTerm( c );
+                updateResultString( numbersAreaLabel );
+            } catch ( ArithmeticException ex ) {
+                updateResultStringToError( numbersAreaLabel );
+            }
+        });
             
-            button.addActionListener( e -> {
-                
-                try {
-                   calculator.calculate(); 
-                   updateResultString( numbersAreaLabel );
-                } catch ( ArithmeticException ex ) {
-                    updateResultStringToError( numbersAreaLabel );
-                }
-                
-            });
-            
-        } else {
-            
-            button.addActionListener( e -> {
-                
-                try {
-                    calculator.addTerm( c );
-                    updateResultString( numbersAreaLabel );
-                } catch ( ArithmeticException ex ) {
-                    updateResultStringToError( numbersAreaLabel );
-                }
-                
-                
-            });
-            
-        }
+        return button;
+    }
+    
+    /**
+     * Create a new equals button
+     * @param numbersAreaLabel is the label that the button will change String
+     * @param buttonArea is the area and localization of the button
+     * @return the button created
+     */
+    private JButton createEqualsButton( JLabel numbersAreaLabel, Rectangle buttonArea ) {
         
+        JButton button = new JButton( "=" );
+        button.setBounds( buttonArea );
+
+        button.addActionListener( e -> {
+                
+            try {
+                calculator.calculate(); 
+                updateResultString( numbersAreaLabel );
+            } catch ( Exception | Error ex ) {
+                updateResultStringToError( numbersAreaLabel );
+                calculator.clearAll();
+            }
+                
+        });
+       
         return button;
     }
     

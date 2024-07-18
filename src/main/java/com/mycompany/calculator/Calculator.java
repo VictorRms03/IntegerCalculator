@@ -4,6 +4,9 @@
  */
 package com.mycompany.calculator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Victor Ramos
@@ -14,31 +17,52 @@ public class Calculator {
     private boolean hasOperationResult = false;
     
     /**
-     * Execute the calculation with the first 3 terms ( 2 numbers and 1 operator)
+     * Execute the calculation with 3 terms ( 2 numbers and 1 operator)
      * till it gets the result, then call clearAll() and add the result to the
      * string operation.
      */
     public void calculate() {
         
-        String[] terms = this.operation.toString().split( " " );
+        List<String> terms = new ArrayList<>();
+        
+        
+        for( String s : operation.toString().split(" ")){
+            terms.add(s);
+        }
+        
+        // trowing error if the last term is a operator
+        if ( isOperator( terms.getLast() ) ) {
+            throw new AssertionError();
+        }
+        
+        // treating operators as first term
+        if ( isOperator( terms.getFirst() ) ) {
+            
+            if ( terms.getFirst().equals("+") ){
+                terms.remove(0);  
+            } else if ( terms.getFirst().equals("-") ) {
+                terms.addFirst("0");
+            } else {
+                throw new AssertionError();
+            }
+            
+        }
         
         // doing the * and / operations first:
-        int k = terms.length;
-        for( int i=0; i<k; ){
-            if( terms[i].equals("*") || terms[i].equals("/") ){
+        for( int i=0; i<terms.size(); ) {
+            if( terms.get(i).equals("*") || terms.get(i).equals("/") ){
                 terms = calculate( terms, i-1 );
-                k-=2;
             } else {
                 i++;
             }
         }
         
         // doing the rest of the operations:
-        while ( terms.length > 1 ){
+        while ( terms.size() > 1 ){
             terms = calculate( terms, 0 );
         }
         
-        this.operation.append(" = ").append( terms[0] );
+        this.operation.append(" = ").append( terms.get(0) );
         this.hasOperationResult = true;
         
     }
@@ -52,28 +76,22 @@ public class Calculator {
      * be compressed.
      * @return the given array but with the 3 first terms compressed as just 1.
      */
-    private String[] calculate( String[] terms, int start ) {
+    private List<String> calculate( List<String> terms, int start ) {
         
-        String[] newTerms = new String[terms.length-2];
-        
-        for( int i=0; i<start; i++ ){
-            newTerms[i] = terms[i];
-        }
-        
-        switch ( terms[start+1] ) {
+        switch ( terms.get(start+1) ) {
             case "+":
-                newTerms[start] = Integer.toString( Integer.parseInt( terms[start] ) + Integer.parseInt( terms[start+2] ) );
+                terms.set(start, Integer.toString( Integer.parseInt( terms.get(start) ) + Integer.parseInt( terms.get(start+2) ) ) );
                 break;
             case "-":
-                newTerms[start] = Integer.toString( Integer.parseInt( terms[start] ) - Integer.parseInt( terms[start+2] ) );
+                terms.set(start, Integer.toString( Integer.parseInt( terms.get(start) ) - Integer.parseInt( terms.get(start+2) ) ) );
                 break;
             case "*":
-                newTerms[start] = Integer.toString( Integer.parseInt( terms[start] ) * Integer.parseInt( terms[start+2] ) );
+                terms.set(start, Integer.toString( Integer.parseInt( terms.get(start) ) * Integer.parseInt( terms.get(start+2) ) ) );
                 break;
             case "/":
                 
                 try {
-                    newTerms[start] = Integer.toString( Integer.parseInt( terms[start] ) / Integer.parseInt( terms[start] ) );
+                    terms.set(start, Integer.toString( Integer.parseInt( terms.get(start) ) / Integer.parseInt( terms.get(start+2) ) ) );
                 } catch ( ArithmeticException e ) {
                     throw e;
                 }
@@ -83,13 +101,11 @@ public class Calculator {
             default:
                 throw new AssertionError();
         }
+                
+        terms.remove(start+1);
+        terms.remove(start+1);
         
-        
-        for( int i=start+1; i<newTerms.length; i++ ) {
-            newTerms[i] = terms[i+2];
-        }
-        
-        return newTerms;
+        return terms;
         
     }
     
@@ -159,11 +175,20 @@ public class Calculator {
     }
     
     /**
-     * Decide if the term is an operator ( '+', '-', '*', '/' ).
-     * @param term the term that will be compared.
+     * Decide if the char term is an operator ( '+', '-', '*', '/' ).
+     * @param term the term that will be compared on char format.
      * @return true if the term is an operator and false if it isn't.
      */
     private boolean isOperator ( char term ){
         return term == '+' || term == '-' || term == '*' || term == '/';
+    }
+    
+    /**
+     * Decide if the String term is an operator ( '+', '-', '*', '/' ).
+     * @param term the term that will be compared on String format.
+     * @return true if the term is an operator and false if it isn't.
+     */
+    private boolean isOperator ( String term ){
+        return term.equals( "+" ) || term.equals( "-" ) || term.equals( "*" ) || term.equals( "/" );
     }
 }
