@@ -106,16 +106,16 @@ public class CalculatorFrame extends JFrame {
         
         List<JButton> buttonsList = new ArrayList<>();
         
-        buttonsList.add( createNumberButton( 1, numbersAreaLabel, new Rectangle( 0, 200, 100, 100 ) ) );
-        buttonsList.add( createNumberButton( 2, numbersAreaLabel, new Rectangle( 100, 200, 100, 100 ) ) );
-        buttonsList.add( createNumberButton( 3, numbersAreaLabel, new Rectangle( 200, 200, 100, 100 ) ) );
-        buttonsList.add( createNumberButton( 4, numbersAreaLabel, new Rectangle( 0, 100, 100, 100 ) ) );
-        buttonsList.add( createNumberButton( 5, numbersAreaLabel, new Rectangle( 100, 100, 100, 100 ) ) );
-        buttonsList.add( createNumberButton( 6, numbersAreaLabel, new Rectangle( 200, 100, 100, 100 ) ) );
-        buttonsList.add( createNumberButton( 7, numbersAreaLabel, new Rectangle( 0, 0, 100, 100 ) ) );
-        buttonsList.add( createNumberButton( 8, numbersAreaLabel, new Rectangle( 100, 0, 100, 100 ) ) );
-        buttonsList.add( createNumberButton( 9, numbersAreaLabel, new Rectangle( 200, 0, 100, 100 ) ) );
-        buttonsList.add( createNumberButton( 0, numbersAreaLabel, new Rectangle( 100, 300, 100, 100 ) ) ); 
+        buttonsList.add( createNumberButton( '1', numbersAreaLabel, new Rectangle( 0, 200, 100, 100 ) ) );
+        buttonsList.add( createNumberButton( '2', numbersAreaLabel, new Rectangle( 100, 200, 100, 100 ) ) );
+        buttonsList.add( createNumberButton( '3', numbersAreaLabel, new Rectangle( 200, 200, 100, 100 ) ) );
+        buttonsList.add( createNumberButton( '4', numbersAreaLabel, new Rectangle( 0, 100, 100, 100 ) ) );
+        buttonsList.add( createNumberButton( '5', numbersAreaLabel, new Rectangle( 100, 100, 100, 100 ) ) );
+        buttonsList.add( createNumberButton( '6', numbersAreaLabel, new Rectangle( 200, 100, 100, 100 ) ) );
+        buttonsList.add( createNumberButton( '7', numbersAreaLabel, new Rectangle( 0, 0, 100, 100 ) ) );
+        buttonsList.add( createNumberButton( '8', numbersAreaLabel, new Rectangle( 100, 0, 100, 100 ) ) );
+        buttonsList.add( createNumberButton( '9', numbersAreaLabel, new Rectangle( 200, 0, 100, 100 ) ) );
+        buttonsList.add( createNumberButton( '0', numbersAreaLabel, new Rectangle( 100, 300, 100, 100 ) ) ); 
         
         buttonsList.add( createOperatorButton( '/', numbersAreaLabel, new Rectangle( 300, 0, 100, 100 ) ) );
         buttonsList.add( createOperatorButton( '*', numbersAreaLabel, new Rectangle( 300, 100, 100, 100 ) ) );
@@ -136,11 +136,11 @@ public class CalculatorFrame extends JFrame {
      * @param buttonArea is the area and localization of the button
      * @return the button created
      */
-    private JButton createNumberButton( Integer x, JLabel numbersAreaLabel, Rectangle buttonArea ) {
+    private JButton createNumberButton( Character x, JLabel numbersAreaLabel, Rectangle buttonArea ) {
         JButton button = new JButton( x.toString() );
         button.setBounds( buttonArea );
         button.addActionListener( e -> {
-            calculator.addNumber( x );
+            calculator.addTerm( x );
             updateResultString( numbersAreaLabel );
         });
         return button;
@@ -176,7 +176,7 @@ public class CalculatorFrame extends JFrame {
             button.addActionListener( e -> {
                 
                 try {
-                    calculator.setOperator( c );
+                    calculator.addTerm( c );
                     updateResultString( numbersAreaLabel );
                 } catch ( ArithmeticException ex ) {
                     updateResultStringToError( numbersAreaLabel );

@@ -10,128 +10,140 @@ package com.mycompany.calculator;
  */
 public class Calculator {
     
-    private Integer leftNumber = 0;
-    private Integer rightNumber = 0;
-    private char operator = ' ';
-    private boolean isLeftNumberResult = false;
+    private StringBuilder operation = new StringBuilder();
+    private boolean hasOperationResult = false;
     
     /**
-     * Execute the calculation with the parameters of the Calculator, treating 
-     * the ArithmeticException of division by 0 error
+     * Execute the calculation with the first 3 terms ( 2 numbers and 1 operator)
+     * till it gets the result, then add it to the string operation.
      */
     public void calculate() {
         
-        int result;
+        String[] terms = operation.toString().split( " " );
         
-        switch ( this.operator ) {
-            case '+':
-                result = this.leftNumber + this.rightNumber;
+        while ( terms.length > 1 ){
+            terms = calculate( terms );
+        }
+        
+        operation.append(" = ").append( terms[0] );
+        hasOperationResult = true;
+        
+    }
+    
+    /**
+     * Execute the calculation with the first 3 terms and return the result
+     * of these as just 1 term on the given array treating the 
+     * ArithmeticException of division by 0 error.
+     * @param terms is the array with all terms of the operation.
+     * @return the given array but with the 3 first terms compressed as just 1.
+     */
+    private String[] calculate( String[] terms ) {
+        
+        String[] newTerms = new String[ terms.length-2];
+        
+        switch ( terms[1] ) {
+            case "+":
+                newTerms[0] = Integer.toString( Integer.parseInt( terms[0] ) + Integer.parseInt( terms[2] ) );
                 break;
-            case '-':
-                result = this.leftNumber - this.rightNumber;
+            case "-":
+                newTerms[0] = Integer.toString( Integer.parseInt( terms[0] ) - Integer.parseInt( terms[2] ) );
                 break;
-            case '*':
-                result = this.leftNumber * this.rightNumber;
+            case "*":
+                newTerms[0] = Integer.toString( Integer.parseInt( terms[0] ) * Integer.parseInt( terms[2] ) );
                 break;
-            case '/':
+            case "/":
                 
                 try {
-                    result = this.leftNumber / this.rightNumber;
+                    newTerms[0] = Integer.toString( Integer.parseInt( terms[0] ) / Integer.parseInt( terms[2] ) );
                 } catch ( ArithmeticException e ) {
-                    clearAll();
-                    result = 0;
                     throw e;
                 }
+                
                 break;
                 
             default:
-                result = this.leftNumber;
-                break;
+                throw new AssertionError();
         }
         
-        this.leftNumber = result;
-        this.operator = ' ';
-        
-        this.isLeftNumberResult = true;
-    }
-    
-    /**
-     * Add a new number to the calculator, deciding where it will be adding
-     * and appending it to a already existent number if necessary
-     * @param number the number that will be added
-     */
-    public void addNumber( int number ) {
-        
-        if ( this.operator == ' ' ) {
-            
-            if( this.isLeftNumberResult ){ 
-                this.leftNumber = 0;
-                this.isLeftNumberResult = false;
-            }
-            
-            this.leftNumber = appendNumber( this.leftNumber, number );
-            
-        } else {
-            
-            if ( this.isLeftNumberResult ) {
-                this.rightNumber = 0;
-                this.isLeftNumberResult = false;
-            }
-            this.rightNumber = appendNumber( this.rightNumber, number );
-            
+        for( int i=1; i<newTerms.length; i++ ) {
+            newTerms[i] = terms[i+2];
         }
+        
+        return newTerms;
         
     }
     
     /**
-     * Set a new operator to the Calculator
-     * @param operator is the new operator that will be added
+     * Add a new term to the calculator, treating all the scenarios that can
+     * ocurr.
+     * @param term the term ( number or operator ) that will be added.
      */
-    public void setOperator( char operator ) {
+    public void addTerm( char term ) {
         
-        if ( this.operator == ' ' ){
-            
-            this.operator = operator;
-            
-        } else if ( !isLeftNumberResult ){
-            calculate();
-            this.operator = operator;
-        } else {
-            
-            if( operator == this.operator ){
-                calculate();
+        if ( hasOperationResult ) {
+            if ( isOperator( term ) ){
+                String result = operation.toString().split(" ")[ operation.toString().split(" ").length-1 ];
+                clearAll();
+                operation.append( result ); 
             } else {
-                this.operator = operator;
+                clearAll();
             }
             
         }
+        
+        if( this.operation.length()==0 ){
+            
+            this.operation.append( term );
+            
+        } else {
+            
+            if( isOperator( this.operation.charAt( this.operation.length()-1 ) ) ) {
+            
+                if ( isOperator( term ) ) {
+                    this.operation.deleteCharAt( this.operation.length()-1 );
+                    this.operation.append( term );
+                } else {
+                    this.operation.append( ' ' );
+                    this.operation.append( term );
+                }
+
+            } else {
+
+                if ( isOperator( term ) ) {
+                    this.operation.append( ' ' );
+                    this.operation.append( term );
+                } else {
+                    this.operation.append( term );
+                }
+
+            }
+            
+        }
+        
     }
     
     /**
-     * Clear all the variables of the Calculator
+     * Clear all the variables of the Calculator.
      */
     public void clearAll(){
-        
-        this.leftNumber = 0;
-        this.rightNumber = 0;
-        this.operator = ' ';
+        this.operation.delete( 0, this.operation.length() );
+        hasOperationResult = false;
     }
     
     /**
-     * Function that append new numbers to the int value
-     * @param originalNumber is the original number that will have a new number appended to it
-     * @param newNumber is the new number that will be appended to original number
-     * @return the original number with the new number appended to it
-     */
-    private int appendNumber( int originalNumber, int newNumber ) {
-        return originalNumber*10 + newNumber;
-    }
-    
-    /**
-     * Function that returns the string that must be displayed on Result Label
-     * @return the current result string
+     * Function that returns the string that must be displayed on Result Label.
+     * @return the current result string.
      */
     public String getCurrentResultText() {
-        return ( this.operator == ' ' ) ? ( this.leftNumber.toString() ) : ( this.leftNumber + " " + this.operator + " " + this.rightNumber );
-    } 
+        return this.operation.toString();
+    }
+    
+    /**
+     * Decide if the term is an operator ( '+', '-', '*', '/' ).
+     * @param term the term that will be compared.
+     * @return true if the term is an operator and false if it isn't.
+     */
+    private boolean isOperator ( char term ){
+        return term == '+' || term == '-' || term == '*' || term == '/';
+    }
 }

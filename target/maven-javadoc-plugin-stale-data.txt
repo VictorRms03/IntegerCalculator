@@ -1,0 +1,40 @@
+@options
+@packages
+-encoding
+'UTF-8'
+-protected
+-source
+'22'
+-sourcepath
+'C:/Users/victo/OneDrive/Documentos/NetBeansProjects/IntegerCalculator/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2024. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/victo/OneDrive/Documentos/NetBeansProjects/IntegerCalculator/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'IntegerCalculator 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'IntegerCalculator 1.0-SNAPSHOT API'
+com.mycompany.calculator
+C:\Users\victo\OneDrive\Documentos\NetBeansProjects\IntegerCalculator\src\main\java = 1720535892771
+C:\Users\victo\OneDrive\Documentos\NetBeansProjects\IntegerCalculator\target\site\apidocs\allclasses-index.html = 1720536478024
+C:\Users\victo\OneDrive\Documentos\NetBeansProjects\IntegerCalculator\target\site\apidocs\allpackages-index.html = 1720536478028
+C:\Users\victo\OneDrive\Documentos\NetBeansProjects\IntegerCalculator\target\site\apidocs\element-list = 1720536477943
+C:\Users\victo\OneDrive\Documentos\NetBeansProjects\IntegerCalculator\target\site\apidocs\help-doc.html = 1720536478065
+C:\Users\victo\OneDrive\Documentos\NetBeansProjects\IntegerCalculator\target\site\apidocs\index-all.html = 1720536478052
+C:\Users\victo\OneDrive\Documentos\NetBeansProjects\IntegerCalculator\target\site\apidocs\index.html = 1720536478059
+C:\Users\victo\OneDrive\Documentos\NetBeansProjects\IntegerCalculator\target\site\apidocs\member-search-index.js = 1720536478037
+C:\Users\victo\OneDrive\Documentos\NetBeansProjects\IntegerCalculator\target\site\apidocs\module-search-index.js = 1720536478030
+C:\Users\victo\OneDrive\Documentos\NetBeansProjects\IntegerCalculator\target\site\apidocs\overview-tree.html = 1720536478012
+C:\Users\victo\OneDrive\Documentos\NetBeansProjects\IntegerCalculator\target\site\apidocs\package-search-index.js = 1720536478033
+C:\Users\victo\OneDrive\Documentos\NetBeansProjects\IntegerCalculator\target\site\apidocs\search.html = 1720536478056
+C:\Users\victo\OneDrive\Documentos\NetBeansProjects\IntegerCalculator\target\site\apidocs\serialized-form.html = 1720536477978
+C:\Users\victo\OneDrive\Documentos\NetBeansProjects\IntegerCalculator\target\site\apidocs\tag-search-index.js = 1720536478039
+C:\Users\victo\OneDrive\Documentos\NetBeansProjects\IntegerCalculator\target\site\apidocs\type-search-index.js = 1720536478035
