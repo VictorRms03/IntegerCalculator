@@ -80,18 +80,18 @@ public class Calculator {
         
         switch ( terms.get(start+1) ) {
             case "+":
-                terms.set(start, Integer.toString( Integer.parseInt( terms.get(start) ) + Integer.parseInt( terms.get(start+2) ) ) );
+                terms.set( start, Integer.toString( Integer.parseInt( terms.get(start) ) + Integer.parseInt( terms.get(start+2) ) ) );
                 break;
             case "-":
-                terms.set(start, Integer.toString( Integer.parseInt( terms.get(start) ) - Integer.parseInt( terms.get(start+2) ) ) );
+                terms.set( start, Integer.toString( Integer.parseInt( terms.get(start) ) - Integer.parseInt( terms.get(start+2) ) ) );
                 break;
             case "*":
-                terms.set(start, Integer.toString( Integer.parseInt( terms.get(start) ) * Integer.parseInt( terms.get(start+2) ) ) );
+                terms.set( start, Integer.toString( Integer.parseInt( terms.get(start) ) * Integer.parseInt( terms.get(start+2) ) ) );
                 break;
             case "/":
                 
                 try {
-                    terms.set(start, Integer.toString( Integer.parseInt( terms.get(start) ) / Integer.parseInt( terms.get(start+2) ) ) );
+                    terms.set( start, Integer.toString( Integer.parseInt( terms.get(start) ) / Integer.parseInt( terms.get(start+2) ) ) );
                 } catch ( ArithmeticException e ) {
                     throw e;
                 }
@@ -124,13 +124,10 @@ public class Calculator {
             } else {
                 clearAll();
             }
-            
         }
         
         if( this.operation.length()==0 ){
-            
             this.operation.append( term );
-            
         } else {
             
             if( isOperator( this.operation.charAt( this.operation.length()-1 ) ) ) {
@@ -151,11 +148,35 @@ public class Calculator {
                 } else {
                     this.operation.append( term );
                 }
-
             }
-            
         }
+    }
+    
+    /**
+     * Remove last term of the operation
+     */
+    public void removeLastTerm() {
         
+        if ( hasOperationResult ){
+            
+            while( this.operation.charAt( this.operation.length()-1 ) != '=' ){
+                this.operation.deleteCharAt( this.operation.length()-1 );
+            }
+            this.operation.delete(this.operation.length()-2, this.operation.length());
+            
+            this.hasOperationResult = false;
+            
+        } else {
+            if ( !this.operation.isEmpty() ){
+                this.operation.deleteCharAt( this.operation.length()-1 );
+            }
+        
+            if ( !this.operation.isEmpty() ){
+                if ( this.operation.charAt( this.operation.length()-1 ) == ' '){
+                    this.operation.deleteCharAt( this.operation.length()-1 ); 
+                 }
+            }
+        }
     }
     
     /**

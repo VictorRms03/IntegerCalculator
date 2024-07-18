@@ -121,9 +121,10 @@ public class CalculatorFrame extends JFrame {
         buttonsList.add( createOperatorButton( '*', numbersAreaLabel, new Rectangle( 300, 100, 100, 100 ) ) );
         buttonsList.add( createOperatorButton( '-', numbersAreaLabel, new Rectangle( 300, 200, 100, 100 ) ) );
         buttonsList.add( createOperatorButton( '+', numbersAreaLabel, new Rectangle( 300, 300, 100, 100 ) ) );
-        buttonsList.add( createEqualsButton( numbersAreaLabel, new Rectangle( 200, 300, 100, 100 ) ) );
+        buttonsList.add( createEqualsButton( "=", numbersAreaLabel, new Rectangle( 200, 300, 100, 100 ) ) );
         
-        buttonsList.add( createClearButton( "CLEAR" ,numbersAreaLabel, new Rectangle( 0, 300, 100, 100 ) ) );
+        buttonsList.add( createClearButton( "CLEAR", numbersAreaLabel, new Rectangle( 0, 300, 100, 50 ) ) );
+        buttonsList.add( createDeleteButton( "REMOVE", numbersAreaLabel, new Rectangle( 0, 350, 100, 50 ) ) );
         
         return buttonsList;
         
@@ -177,9 +178,9 @@ public class CalculatorFrame extends JFrame {
      * @param buttonArea is the area and localization of the button
      * @return the button created
      */
-    private JButton createEqualsButton( JLabel numbersAreaLabel, Rectangle buttonArea ) {
+    private JButton createEqualsButton( String s, JLabel numbersAreaLabel, Rectangle buttonArea ) {
         
-        JButton button = new JButton( "=" );
+        JButton button = new JButton( s );
         button.setBounds( buttonArea );
 
         button.addActionListener( e -> {
@@ -209,6 +210,23 @@ public class CalculatorFrame extends JFrame {
         button.setBounds( buttonArea );
         button.addActionListener( e -> {
             calculator.clearAll();
+            updateResultString( numbersAreaLabel );
+        });
+        return button;
+    }
+    
+    /**
+     * Create a new delete button
+     * @param s is the String that will show on the button
+     * @param numbersAreaLabel is the label that the button will change String
+     * @param buttonArea is the area and localization of the button
+     * @return the button created
+     */
+    private JButton createDeleteButton( String s, JLabel numbersAreaLabel, Rectangle buttonArea ) {
+        JButton button = new JButton( s );
+        button.setBounds( buttonArea );
+        button.addActionListener( e -> {
+            calculator.removeLastTerm();
             updateResultString( numbersAreaLabel );
         });
         return button;
