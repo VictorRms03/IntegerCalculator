@@ -11,5 +11,4 @@
         <maven.compiler.target>22</maven.compiler.target>
         <exec.mainClass>com.mycompany.calculator.Main</exec.mainClass>
     </properties>
-    <name>IntegerCalculator</name>
 </project>
